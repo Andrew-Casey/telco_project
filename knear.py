@@ -6,92 +6,6 @@ import pandas as pd
 import numpy as np
 
 
-def k_nearest(X_train, y_train, X_validate, y_validate):
-    
-    # define variables
-    metrics = []
-    for k in range(1,21):
-        # make
-        knn = KNeighborsClassifier(n_neighbors=k)
-        # fit
-        knn.fit(X_train, y_train)
-        # use
-        train_score = knn.score(X_train, y_train)
-        validate_score = knn.score(X_validate, y_validate)
-
-        diff_score = train_score - validate_score
-
-        output = pd.DataFrame({
-            'k': [k],
-            'train_score': [train_score],
-            'validate_score': [validate_score],
-            'diff_score': [diff_score]
-        })
-
-        metrics.append(output)
-
-    baseline_accuracy = (y_train == 0).mean()
-
-    results = pd.concat(metrics, ignore_index=True)
-
-    sns.set_style('whitegrid')
-    results.set_index('k').plot(figsize=(16,9))
-    plt.ylabel('Accuracy')
-    plt.axhline(baseline_accuracy, linewidth=2, color='black', label='baseline')
-    plt.xticks(np.arange(0,21,1))
-    
-    plt.legend()
-    plt.show()
-    
-    return results
-
-
-def k_nearest1(X_train, y_train, X_validate, y_validate):
-    
-    # define variables
-    metrics = []
-    for k in range(1,21):
-        # make
-        knn = KNeighborsClassifier(n_neighbors=k)
-        # fit
-        knn.fit(X_train, y_train)
-        # use
-        train_score = knn.score(X_train, y_train)
-        validate_score = knn.score(X_validate, y_validate)
-
-        diff_score = train_score - validate_score
-
-        output = pd.DataFrame({
-            'k': [k],
-            'train_score': [train_score],
-            'validate_score': [validate_score],
-            'diff_score': [diff_score]
-        })
-
-        metrics.append(output)
-
-    baseline_accuracy = (y_train == 0).mean()
-
-    results = pd.concat(metrics, ignore_index=True)
-
-    sns.set_style('whitegrid')
-    ax = results.set_index('k').plot(figsize=(16,9))
-    plt.ylabel('Accuracy')
-    plt.axhline(baseline_accuracy, linewidth=2, color='black', label='baseline')
-    plt.xticks(np.arange(0,21,1))
-    
-    min_diff_idx = np.abs(results['diff_score']).argmin()
-    min_diff_k = results.loc[min_diff_idx, 'k']
-    min_diff_score = results.loc[min_diff_idx, 'diff_score']
-    
-    ax.axvline(min_diff_k, linestyle='--', linewidth=2, color='red', label=f'min diff at k={min_diff_k} (diff={min_diff_score:.3f})')
-    
-    plt.legend()
-    plt.show()
-    
-    return results
-
-
 def k_nearest2(X_train, y_train, X_validate, y_validate):
     """
     Trains and evaluates KNN models for different values of k and plots the results.
@@ -127,19 +41,25 @@ def k_nearest2(X_train, y_train, X_validate, y_validate):
 
     results = pd.DataFrame.from_records(metrics)
 
+    # modify the last few lines of the function
+    # drop the diff_score column before plotting
+    results_for_plotting = results.drop(columns=['diff_score'])
     with sns.axes_style('whitegrid'):
-        ax = results.set_index('k').plot(figsize=(16,9))
-        plt.ylabel('Accuracy')
-        plt.axhline(baseline_accuracy, linewidth=2, color='black', label='baseline')
-        plt.xticks(np.arange(0,21,1))
-        min_diff_idx = np.abs(results['diff_score']).argmin()
-        min_diff_k = results.loc[min_diff_idx, 'k']
-        min_diff_score = results.loc[min_diff_idx, 'diff_score']
-        ax.axvline(min_diff_k, linestyle='--', linewidth=2, color='red', label=f'min diff at k={min_diff_k} (diff={min_diff_score:.3f})')
-        plt.legend()
-        plt.show()
+        ax = results_for_plotting.set_index('k').plot(figsize=(16,9))
+    plt.ylabel('Accuracy')
+    plt.axhline(baseline_accuracy, linewidth=2, color='black', label='baseline')
+    plt.xticks(np.arange(0,21,1))   
+    min_diff_idx = np.abs(results['diff_score']).argmin()
+    min_diff_k = results.loc[min_diff_idx, 'k']
+    min_diff_score = results.loc[min_diff_idx, 'diff_score']
+    ax.axvline(min_diff_k, linestyle='--', linewidth=2, color='red', label=f'min diff at k={min_diff_k} (diff={min_diff_score:.3f})')
+    plt.fill_between(results['k'], train_score, validate_score, alpha=0.2, color='gray', where=(results['k'] > 0))    
+    plt.title('K Nearest Neighbor', fontsize=18)
+    plt.legend()
+    plt.show()
     
     return results
+
 
 
     

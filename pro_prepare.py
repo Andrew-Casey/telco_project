@@ -1,8 +1,17 @@
-import acquire as acq
+import pro_acquire as acq
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
 def prep_telco():
+    """
+    Prepares the Telco customer churn dataset by dropping unnecessary columns, encoding categorical variables, 
+    creating dummy variables for certain categorical features, and converting the 'total_charges' column to float type.
+
+    Returns:
+    --------
+    telco: pandas DataFrame
+        The cleaned and preprocessed Telco customer churn dataset.
+    """
     # Load the telco data
     telco = acq.get_telco_churn()
     # Drop unnecessary columns
