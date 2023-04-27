@@ -184,3 +184,93 @@ def make_that_csv(X_test, test, rf1):
     result_df.to_csv('result.csv', index=False)
 
     return
+
+def plot_that_target(train):
+    """
+    Visualize the target variable.
+
+    Parameters:
+    -----------
+    train: pandas DataFrame
+        
+    Returns:
+    --------
+    countplot of churn in the train data set
+    """
+    sns.countplot(data=train, x='churn_encoded')
+    plt.title('Churn')
+    plt.show
+
+    return
+
+def plot_mcharges_v_churn(train):
+    """
+    Visualize the monthly charges vs. churn.
+
+    Parameters:
+    -----------
+    train: pandas DataFrame
+        
+    Returns:
+    --------
+    histogram of monthly charges vs. churn in the train data set
+    """
+    sns.histplot(data=train, x='monthly_charges', hue='churn_encoded')
+    plt.title('Monthly charges vs. Churn')
+    plt.show()
+
+    return
+
+def plot_tenure_v_churn(train):
+    """
+    Visualize tenure vs. churn.
+
+    Parameters:
+    -----------
+    train: pandas DataFrame
+        
+    Returns:
+    --------
+    histogram of tenure vs. churn in the train data set
+    """
+    sns.histplot(data=train, x='tenure', hue='churn_encoded')
+    plt.title('Tenure vs. Churn')
+    plt.show()
+
+    return
+
+def plot_tech_v_churn(train):
+    """
+    Visualize tech support vs. churn.
+
+    Parameters:
+    -----------
+    train: pandas DataFrame
+        
+    Returns:
+    --------
+    countplot of tenure vs. churn in the train data set
+    """
+    sns.countplot(data=train, x='tech_support_Yes', hue='churn_encoded')
+    plt.title('Tech Support vs. Churn')
+    plt.show()
+
+    return
+
+def plot_senior_v_churn(train):
+    """
+    Visualize whether or not someone is a senior citizen and if they churn.
+
+    Parameters:
+    -----------
+    train: pandas DataFrame
+        
+    Returns:
+    --------
+    countplot of senior citizen vs. churn in the train data set
+    """
+    sns.countplot(data=train, x='senior_citizen_encoded', hue='churn_encoded')
+    plt.title('Senior citizen vs. Churn')
+    plt.show()
+
+    return
