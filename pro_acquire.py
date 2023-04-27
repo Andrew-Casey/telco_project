@@ -23,6 +23,19 @@ def check_file_exists(fn, query, url):
 
 
 def get_telco_churn():
+    """
+    Retrieves customer data from the Telco Churn database using a SQL query, and returns the data as a pandas DataFrame.
+
+    Returns
+    -------
+    pandas.DataFrame
+        A DataFrame containing the customer data retrieved from the Telco Churn database.
+
+    Raises
+    ------
+    FileNotFoundError
+        If the specified file does not exist in the local directory.
+    """
     url = env.get_db_url('telco_churn')
     query = ''' select * from customers
 	join contract_types
